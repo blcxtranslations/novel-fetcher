@@ -6,7 +6,7 @@ from rss_wuxiaworld import rss_wuxiaworld
 
 
 def fetch():
-    links = []
-    links += rss_gravitytales()
-    links += rss_wuxiaworld()
-    return links
+  links = []
+  links += rss_gravitytales()
+  links += rss_wuxiaworld()
+  return links

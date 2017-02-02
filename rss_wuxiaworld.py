@@ -22,8 +22,8 @@ novels = {
 def stripunicode(text):
     return ''.join(i for i in text if ord(i)<128).strip()
 
-def get_page(feed_url):
-  req = urllib2.Request(feed_url , headers={'User-Agent': 'Magic Browser'})
+def get_page(url):
+  req = urllib2.Request(url , headers={'User-Agent': 'Magic Browser'})
   return urllib2.urlopen(req).read()
 
 def find_links(link_url):

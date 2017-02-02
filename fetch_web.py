@@ -6,7 +6,7 @@ from web_wuxiaworld import web_wuxiaworld
 
 
 def fetch():
-    links = []
-    links += web_gravitytales()
-    links += web_wuxiaworld()
-    return links
+  links = []
+  links += web_gravitytales()
+  links += web_wuxiaworld()
+  return links

@@ -17,20 +17,18 @@ def fetch(args):
     links = fetch_rss.fetch()
   else:
     links = fetch_web.fetch()
-
   links = check_links(links)
   if not args.dry_run:
     send_links(links, args.config_file)
   store_links(links, args)
 
 def check_tick(args):
-  if args.dry_run or args.run_once:
-    fetch(args)
+  if args.fetch_new and not args.run_once:
+    while True:
+      fetch(args)
+      time.sleep((int)(args.interval))
   else:
-    if args.fetch_new:
-      while True:
-        fetch(args)
-        time.sleep((int)(args.interval))
+    fetch(args)
 
 def daemonize(args):
   check_tick(args)
