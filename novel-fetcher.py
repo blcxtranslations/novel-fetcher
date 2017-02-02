@@ -143,9 +143,9 @@ def daemonize(args):
 
 
 parser = argparse.ArgumentParser(description='Send links to Instapaper through GMail')
-parser.add_argument('-c', '--config', dest='config_file', help='Configuration file with email address, password, and Instapaper save email')
-parser.add_argument('-d', '--dry-run', dest='dry_run', action='store_true', help='Do a dry-run but also store all fetched items so they are not send to Instapaper')
-parser.add_argument('-i', '--interval', dest='interval', default=600, help='How often in seconds to check the RSS feed')
+parser.add_argument('-c', '--config', dest='config_file', help='Configuration file with email address, password, and receiver email')
+parser.add_argument('-d', '--dry-run', dest='dry_run', action='store_true', help='Do a dry-run, not storing, no sending to email')
+parser.add_argument('-i', '--interval', dest='interval', default=600, help='How often in seconds to check the RSS feed (default 600 seconds)')
 
 args = parser.parse_args()
 daemonize(args)
