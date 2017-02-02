@@ -5,20 +5,20 @@ import smtplib
 from email.mime.text import MIMEText
 
 
-def get_creds(args):
+def get_creds(creds):
   # TODO: more secure way of creds
-  f = open(args.config_file)
+  f = open(creds)
   username = f.readline()[:-1]
   password = f.readline()[:-1]
   receiver = f.readline()[:-1]
   f.close()
   return username, password, receiver
 
-def send_links(links):
+def send_links(links, creds):
   if len(links) == 0:
     return
 
-  username, password, receiver = get_creds(args)
+  username, password, receiver = get_creds(creds)
 
   try:
     server = smtplib.SMTP('smtp.gmail.com:587')
