@@ -18,6 +18,7 @@ def fetch(args):
   else:
     links = fetch_web.fetch()
   links = check_links(links)
+  links.sort()
   if not args.dry_run:
     send_links(links, args.config_file)
   store_links(links, args)

@@ -4,19 +4,8 @@
 from bs4 import BeautifulSoup
 import urllib2
 import re
+from utility_common import *
 
-
-def get_page(url):
-  req = urllib2.Request(url , headers={'User-Agent': 'Magic Browser'})
-  return urllib2.urlopen(req).read()
-
-def find_links(link_url):
-  soup = BeautifulSoup(get_page(link_url), "lxml")
-  article = soup.find('article')
-  links = [a['href'] for a in article.findAll('a')]
-  links = filter(lambda link: 'www.wuxiaworld.com' in link and 'index' in link and 'chapter' in link, links)
-  links = list(set(links))
-  return links
 
 def sort_links(links):
   new_links = []
@@ -28,9 +17,6 @@ def sort_links(links):
   new_links.sort(key=lambda x: x[0])
   return new_links
 
-def stripunicode(text):
-    return ''.join(i for i in text if ord(i)<128).strip()
-
 def find_novels():
   main_url = 'http://www.wuxiaworld.com/'
   main_page = get_page(main_url)
@@ -39,17 +25,14 @@ def find_novels():
   items = filter(lambda item: 'index' in item['href'], items)
   links = []
   for item in items:
-    title = str(stripunicode(item.text)).replace(' ()', '')
+    title = str(strip_unicode(item.text)).replace(' ()', '')
     link = item['href']
     links.append([title, link])
   links.sort(key=lambda x: x[0])
   return links
 
-def get_length(url):
-  return 100
-
 def get_chapters(url, lower=None, upper=None):
-  links = find_links(url)
+  links = find_links(url, ['www.wuxiaworld.com', 'index', 'chapter'])
   links = sort_links(links)
   if not lower is None:
     links = filter(lambda link: int(link[0]) >= lower, links)
