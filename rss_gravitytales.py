@@ -7,30 +7,26 @@ import re
 import urllib2
 import xml.etree.ElementTree as ET
 from utility_common import *
+from index_gravitytales import get_index
+import time
 
 
-novels = {
-  'single': [
-    "Ancient Godly Monarch",
-    "Chaotic Lightning Cultivation",
-  ],
-  'multi': [
-  ]
-}
-
-
-def parse_feed():
+def parse_feed(feed_url):
   releases = []
-  feed = feedparser.parse('http://gravitytales.com/feed')
+  print '1'
+  feed = feedparser.parse(feed_url)
+  print '2'
   for entry in feed.entries:
     link = strip_unicode(entry.link)
-    links = []
-    if any(novel in entry.title for novel in novels['single']):
-      links = find_links(link, ['gravitytales.com', 'novel'])
-    # elif entry.category in novels['multi']:
-      # links = construct_links(link)
+    links = find_links(link, 'http://gravitytales.com', ['novel'])
     releases += links
   return releases
 
 def rss_gravitytales():
-  return parse_feed()
+  index = get_index()
+  links = []
+  for item in index:
+    time.sleep(0.01)
+    print "Parsing     : ", item[0]
+    links += parse_feed(item[2])
+  return links

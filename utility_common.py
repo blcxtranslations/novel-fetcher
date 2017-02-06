@@ -15,10 +15,12 @@ def get_page(url):
   req.close()
   return page
 
-def find_links(link_url, includes, excludes=[]):
-  soup = BeautifulSoup(get_page(link_url), "lxml")
+def find_links(link_url, starting, includes, excludes=[]):
+  page = get_page(link_url)
+  soup = BeautifulSoup(page, "lxml")
   article = soup.find('article')
   links = [a['href'] for a in article.findAll('a')]
+  links = filter(lambda link: link.startswith(starting), links)
   for include in includes:
     links = filter(lambda link: include in link, links)
   for exclude in excludes:

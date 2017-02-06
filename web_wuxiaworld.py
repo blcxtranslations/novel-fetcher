@@ -32,7 +32,7 @@ def find_novels():
   return links
 
 def get_chapters(url, lower=None, upper=None):
-  links = find_links(url, ['www.wuxiaworld.com', 'index', 'chapter'])
+  links = find_links(url, 'http://www.wuxiaworld.com', ['index', 'chapter'])
   links = sort_links(links)
   if not lower is None:
     links = filter(lambda link: int(link[0]) >= lower, links)

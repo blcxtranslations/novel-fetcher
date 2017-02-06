@@ -11,18 +11,26 @@ def check_links(links):
   c = conn.cursor()
 
   newlinks = []
+  oldlinks = []
+  print '=' * 80
   for link in links:
-    print "Searching   : ", link
+    print "Found       : ", link
     c.execute("SELECT * FROM chapters WHERE link='" + link + "'")
     if not c.fetchone():
-      print "New Link    : ", link
       newlinks.append(link)
     else:
-      print "Old Link    : ", link
-
+      oldlinks.append(link)
   conn.close()
-  return newlinks
 
+  print '=' * 80
+  for link in newlinks:
+    print "New Link    : ", link
+  print '=' * 80
+  for link in oldlinks:
+      print "Old Link    : ", link
+  print '=' * 80
+
+  return newlinks
 
 def store_links(links, args):
   conn = sqlite3.connect('novels.db')
