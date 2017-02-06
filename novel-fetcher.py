@@ -6,6 +6,7 @@ import time
 
 from utility_database import *
 from utility_email import send_links
+from api_instapaper import send_instapaper
 
 import fetch_rss
 import fetch_web
@@ -20,7 +21,8 @@ def fetch(args):
   links = check_links(links)
   links.sort()
   if not args.dry_run:
-    send_links(links, args.config_file)
+    send_instapaper(links, args.config_file)
+    # send_links(links, args.config_file)
   store_links(links, args)
 
 def check_tick(args):
