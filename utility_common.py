@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import urllib2
+from api_instapaper import send_instapaper
 from bs4 import BeautifulSoup
+import urllib2
 
 
 def strip_unicode(text):
@@ -25,3 +26,7 @@ def find_links(link_url, includes, excludes=[]):
     links = filter(lambda link: exclude not in link, links)
   links = list(set(links))
   return links
+
+def send_links(links, service):
+  if service['name'] == 'Instapaper':
+    send_instapaper(links, service)

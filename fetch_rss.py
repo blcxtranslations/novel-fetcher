@@ -5,8 +5,8 @@ from rss_gravitytales import rss_gravitytales
 from rss_wuxiaworld import rss_wuxiaworld
 
 
-def fetch():
+def fetch(novels):
   links = []
-  links += rss_gravitytales()
-  links += rss_wuxiaworld()
+  links += rss_gravitytales(novels)
+  links += rss_wuxiaworld(novels)
   return links
