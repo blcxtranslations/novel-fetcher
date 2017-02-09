@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-import urllib2
-import re
 from utility_common import *
+import re
+import urllib2
 
 
 def sort_links(links):

@@ -23,7 +23,6 @@ def check_links(links):
   conn.close()
   return newlinks
 
-
 def store_links(links, args):
   conn = sqlite3.connect('novels.db')
 
