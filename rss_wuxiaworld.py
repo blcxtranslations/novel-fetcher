@@ -4,9 +4,6 @@
 from bs4 import BeautifulSoup
 from utility_common import *
 import feedparser
-import re
-import urllib2
-import xml.etree.ElementTree as ET
 
 
 def construct_links(link_url):
@@ -33,9 +30,11 @@ def parse_feed(novels):
     if entry.category == "Martial God Asura":
       links = construct_links(link)
     else:
-      links = find_links(link, ['www.wuxiaworld.com', 'index'])
+      links = find_links(link, ['www.wuxiaworld.com', 'index', 'chapter'])
     releases += links
   return releases
 
 def rss_wuxiaworld(novels):
   return parse_feed(novels)
+
+print rss_wuxiaworld(['Desolate Era'])

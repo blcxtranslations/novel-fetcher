@@ -1,12 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from bs4 import BeautifulSoup
 from utility_common import *
 import feedparser
-import re
-import urllib2
-import xml.etree.ElementTree as ET
 
 
 def parse_feed(novels):

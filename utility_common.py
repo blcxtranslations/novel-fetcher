@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from api_instapaper import send_instapaper
-from bs4 import BeautifulSoup
+from lxml import html
 import urllib2
 
 
@@ -17,9 +17,9 @@ def get_page(url):
   return page
 
 def find_links(link_url, includes, excludes=[]):
-  soup = BeautifulSoup(get_page(link_url), "lxml")
-  article = soup.find('article')
-  links = [a['href'] for a in article.findAll('a')]
+  page = get_page(link_url)
+  tree = html.fromstring(page)
+  links = tree.xpath('//a/@href')
   for include in includes:
     links = filter(lambda link: include in link, links)
   for exclude in excludes:
