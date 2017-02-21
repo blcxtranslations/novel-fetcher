@@ -36,5 +36,3 @@ def parse_feed(novels):
 
 def rss_wuxiaworld(novels):
   return parse_feed(novels)
-
-print rss_wuxiaworld(['Desolate Era'])
