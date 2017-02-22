@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from utility_common import colour_print
 import sqlite3
 
 
@@ -12,13 +13,13 @@ def check_links(links):
 
   newlinks = []
   for link in links:
-    print "Searching   : ", link
+    colour_print('Searching', link)
     c.execute("SELECT * FROM chapters WHERE link='" + link + "'")
     if not c.fetchone():
-      print "New Link    : ", link
+      colour_print('New Link', link)
       newlinks.append(link)
     else:
-      print "Old Link    : ", link
+      colour_print('Old Link', link)
 
   conn.close()
   return newlinks
@@ -30,9 +31,9 @@ def store_links(links, args):
     if not args.dry_run:
       c = conn.cursor()
       c.execute("INSERT INTO chapters (link) VALUES ('" + link + "')")
-      print "Stored Link : ", link
+      colour_print('Store Link', link, 'success')
     else:
-      print "Would Store : ", link
+      colour_print('Would Link', link, 'success')
   conn.commit()
   conn.close()
 

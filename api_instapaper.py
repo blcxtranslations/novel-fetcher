@@ -6,6 +6,7 @@ import urllib2
 
 
 def send_instapaper(links, creds):
+  from utility_common import colour_print
   if len(links) == 0:
     return
   ip = Instapaper(creds['email'], creds['password'])
@@ -13,6 +14,6 @@ def send_instapaper(links, creds):
   for link in links:
     (status, msg) = ip.add_item(link)
     if status == 201:
-      print "Stored      : ", link
+      colour_print('Stored', link, 'success')
     else:
-      print "Failed      : ", link
+      colour_print('Failed', link, 'error')

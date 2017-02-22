@@ -30,3 +30,14 @@ def find_links(link_url, includes, excludes=[]):
 def send_links(links, service):
   if service['name'] == 'Instapaper':
     send_instapaper(links, service)
+
+def colour_print(text, message, level=''):
+  background = 43
+  if level == 'success':
+    background = 42
+  elif level == 'error':
+    background = 41
+
+  format = ';'.join([str(5), str(30), str(background)])
+  text = '\x1b[%sm %s \x1b[0m' % (format, '{:10}'.format(text))
+  print text, ': ', message
