@@ -5,3 +5,4 @@
 def init():
     global loglevel
     loglevel = 0
+

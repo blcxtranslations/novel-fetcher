@@ -32,7 +32,7 @@ def send_links(links, service):
   if service['name'] == 'Instapaper':
     send_instapaper(links, service)
 
-def colour_print(text, message, level=''):
+def print_colour(service, status, message, level=''):
   if level not in  ['success', 'error'] and utility_settings.loglevel == 0:
     return
 
@@ -43,5 +43,6 @@ def colour_print(text, message, level=''):
     background = 41
 
   format = ';'.join([str(5), str(30), str(background)])
-  text = '\x1b[%sm %s \x1b[0m' % (format, '{:10}'.format(text))
-  print text, ': ', message
+  text = '{:10}'.format(service) + ': ' + '{:15}'.format(status)
+  text = '\x1b[%sm %s \x1b[0m' % (format, text)
+  print text, message
