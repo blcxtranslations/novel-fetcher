@@ -4,6 +4,7 @@
 from api_instapaper import send_instapaper
 from lxml import html
 import urllib2
+import utility_settings
 
 
 def strip_unicode(text):
@@ -32,6 +33,9 @@ def send_links(links, service):
     send_instapaper(links, service)
 
 def colour_print(text, message, level=''):
+  if level not in  ['success', 'error'] and utility_settings.loglevel == 0:
+    return
+
   background = 43
   if level == 'success':
     background = 42
