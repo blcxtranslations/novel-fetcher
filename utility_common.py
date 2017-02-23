@@ -43,6 +43,6 @@ def print_colour(service, status, message, level=''):
     background = 41
 
   format = ';'.join([str(5), str(30), str(background)])
-  text = '{:10}'.format(service) + ': ' + '{:15}'.format(status)
+  text = '{:10}'.format(service) + ': ' + '{:8}'.format(status)
   text = '\x1b[%sm %s \x1b[0m' % (format, text)
   print text, message
