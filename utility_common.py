@@ -3,6 +3,8 @@
 
 from api_instapaper import send_instapaper
 from lxml import html
+import datetime
+import time
 import urllib2
 import utility_settings
 
@@ -42,7 +44,15 @@ def print_colour(service, status, message, level=''):
   elif level == 'error':
     background = 41
 
-  format = ';'.join([str(5), str(30), str(background)])
-  text = '{:10}'.format(service) + ': ' + '{:8}'.format(status)
-  text = '\x1b[%sm %s \x1b[0m' % (format, text)
-  print text, message
+  totaltime = int(time.time() - time.mktime(time.gmtime(0)))
+  timestamp = str(datetime.datetime.fromtimestamp(totaltime))
+
+  format_timestamp = ';'.join([str(5), str(30), str(44)])
+  format_service = ';'.join([str(5), str(30), str(background)])
+
+  text_timestamp = '{:21}'.format(timestamp)
+  text_service = '{:10}'.format(service) + ': ' + '{:8}'.format(status)
+
+  text_timestamp = '\x1b[%sm %s \x1b[0m' % (format_timestamp, text_timestamp)
+  text_service = '\x1b[%sm %s \x1b[0m' % (format_service, text_service)
+  print text_timestamp, text_service, message
