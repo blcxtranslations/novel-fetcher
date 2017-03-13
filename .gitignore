@@ -1,6 +1,6 @@
-*.db
-*.pyc
-
 *.conf
 *.config
+*.db
+*.err
+*.pyc
 !sample.conf
