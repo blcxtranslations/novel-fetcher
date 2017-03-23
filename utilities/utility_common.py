@@ -44,7 +44,7 @@ def print_colour(service, status, message, level=''):
   elif level == 'error':
     background = 41
 
-  totaltime = int(time.time() - time.mktime(time.gmtime(0)))
+  totaltime = int(time.time() - time.mktime(time.localtime(0)))
   timestamp = str(datetime.datetime.fromtimestamp(totaltime))
 
   format_timestamp = ';'.join([str(5), str(30), str(44)])
