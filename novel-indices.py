@@ -4,13 +4,13 @@
 import argparse
 import time
 
-from utility_common import send_links
-from utility_database import *
-from utility_prefs import get_prefs
-import utility_settings
+from utilities.utility_common import send_links
+from utilities.utility_database import *
+from utilities.utility_prefs import get_prefs
+import utilities.utility_settings as utility_settings
 
-import fetch_rss
-import fetch_web
+import providers.fetch_rss as fetch_rss
+import providers.fetch_web as fetch_web
 
 
 def fetch(args):

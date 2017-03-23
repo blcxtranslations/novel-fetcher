@@ -7,7 +7,7 @@ import simplejson
 
 def get_prefs(prefs):
   # TODO: more secure way of creds
-  f = open(prefs)
+  f = open('configs/' + prefs)
   conf = f.read()
   f.close()
   conf = simplejson.loads(conf)

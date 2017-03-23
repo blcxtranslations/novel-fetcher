@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from utility_common import *
+from utilities.utility_common import *
 import feedparser
 
 

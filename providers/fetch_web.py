@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from web_gravitytales import web_gravitytales
-from web_wuxiaworld import web_wuxiaworld
+from bulk.web_gravitytales import web_gravitytales
+from bulk.web_wuxiaworld import web_wuxiaworld
 
 
 def ask_for_index(str, end, start=1):

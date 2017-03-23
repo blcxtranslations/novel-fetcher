@@ -6,7 +6,12 @@ import urllib2
 
 
 def send_instapaper(links, creds):
-  from utility_common import print_colour
+  # Circular dependency requires that we only import this
+  # And only import it inside this function
+  ############################################################
+  from utilities.utility_common import print_colour
+  ############################################################
+
   if len(links) == 0:
     return
   ip = Instapaper(creds['email'], creds['password'])

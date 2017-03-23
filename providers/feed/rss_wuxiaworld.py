@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
-from utility_common import *
+from utilities.utility_common import *
 import feedparser
 
 

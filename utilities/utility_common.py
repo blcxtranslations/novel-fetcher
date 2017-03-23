@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from api_instapaper import send_instapaper
+from readers.api_instapaper import send_instapaper
 from lxml import html
 import datetime
 import time
