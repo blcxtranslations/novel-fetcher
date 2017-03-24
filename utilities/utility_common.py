@@ -35,7 +35,9 @@ def send_links(links, service):
     send_instapaper(links, service)
 
 def print_colour(service, status, message, level=''):
-  if level not in  ['success', 'error'] and utility_settings.loglevel == 0:
+  if level == 'debug' and utility_settings.loglevel < 2:
+    return
+  if level == 'info' and utility_settings.loglevel < 1:
     return
 
   background = 43
@@ -43,11 +45,13 @@ def print_colour(service, status, message, level=''):
     background = 42
   elif level == 'error':
     background = 41
+  elif level == 'info':
+    background = 44
 
   totaltime = int(time.time() - time.mktime(time.localtime(0)))
   timestamp = str(datetime.datetime.fromtimestamp(totaltime))
 
-  format_timestamp = ';'.join([str(5), str(30), str(44)])
+  format_timestamp = ';'.join([str(5), str(30), str(45)])
   format_service = ';'.join([str(5), str(30), str(background)])
 
   text_timestamp = '{:19}'.format(timestamp)
