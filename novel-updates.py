@@ -40,7 +40,7 @@ def daemonize(args):
 
 parser = argparse.ArgumentParser(description='Send links to Instapaper through GMail')
 parser.add_argument('-d', '--dry-run', dest='dry_run', action='store_true', help='Do a dry-run, not storing, no sending to email')
-parser.add_argument('-i', '--interval', dest='interval', default=60, help='How often in seconds to check the RSS feed (default 600 seconds)')
+parser.add_argument('-i', '--interval', dest='interval', default=600, help='How often in seconds to check the RSS feed (default 600 seconds)')
 parser.add_argument('-l', '--log-level', dest='loglevel', default=1, help='Level of logging messages to display')
 parser.add_argument('-o', '--run-once', dest='run_once', action='store_true', help='Run once')
 parser.add_argument('-p', '--prefs', dest='prefs', help='Configuration file with email address, password, and receiver email')

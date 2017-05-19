@@ -13,7 +13,6 @@ def check_links(links):
 
   newlinks = []
   for link in links:
-    print_colour('Database', 'Search', link)
     c.execute("SELECT * FROM chapters WHERE link='" + link + "'")
     if not c.fetchone():
       print_colour('Database', 'New Link', link)

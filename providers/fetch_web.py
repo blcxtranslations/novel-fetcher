@@ -3,6 +3,7 @@
 
 from bulk.web_gravitytales import web_gravitytales
 from bulk.web_wuxiaworld import web_wuxiaworld
+from bulk.web_fanfiction import web_fanfiction
 
 
 def ask_for_index(str, end, start=1):
@@ -15,8 +16,8 @@ def ask_for_index(str, end, start=1):
   return selection - 1
 
 def fetch():
-  selection = ask_for_index('1 for gravitytales, 2 for wuxiaworld : ', 2)
-  if selection == 1:
+  selection = ask_for_index('1 for wuxiaworld, 2 for fanfictionnet : ', 2)
+  if selection == 0:
     return web_wuxiaworld()
   else:
-    return web_gravitytales()
+    return web_fanfiction()
