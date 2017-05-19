@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from bulk.web_gravitytales import web_gravitytales
 from bulk.web_wuxiaworld import web_wuxiaworld
 from bulk.web_fanfiction import web_fanfiction
 
