@@ -6,7 +6,7 @@ import sqlite3
 
 
 def check_links(links):
-  conn = sqlite3.connect('novels.db')
+  conn = sqlite3.connect('configs/novels.db')
   conn.cursor().execute("CREATE TABLE IF NOT EXISTS chapters (link varchar(256))")
   conn.commit()
   c = conn.cursor()
@@ -24,7 +24,7 @@ def check_links(links):
   return newlinks
 
 def store_links(links, args):
-  conn = sqlite3.connect('novels.db')
+  conn = sqlite3.connect('configs/novels.db')
 
   for link in links:
     if not args.dry_run:
