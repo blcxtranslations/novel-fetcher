@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from readers.api_instapaper import send_instapaper
 from lxml import html
 import datetime
 import time
@@ -32,6 +31,7 @@ def find_links(link_url, includes, excludes=[]):
 
 def send_links(links, service):
   if service['name'] == 'Instapaper':
+    from readers.instapaper import send_instapaper
     send_instapaper(links, service)
 
 def print_colour(service, status, message, level=''):

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from instapaperlib import Instapaper
+from apis.instapaper import Instapaper
 import urllib2
 
 
@@ -14,11 +14,11 @@ def send_instapaper(links, creds):
 
   if len(links) == 0:
     return
-  ip = Instapaper(creds['email'], creds['password'])
-  ip.auth()
+  ip = Instapaper(creds['key'], creds['secret'])
+  ip.login(creds['email'], creds['password'])
   for link in links:
-    (status, msg) = ip.add_item(link)
-    if status == 201:
+    success, msg = ip.bookmark_add(link)
+    if success:
       print_colour('Instapaper', 'Success', link, 'success')
     else:
       print_colour('Instapaper', 'Failed', link, 'error')
