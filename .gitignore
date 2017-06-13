@@ -4,3 +4,4 @@
 *.err
 *.pyc
 !sample.conf
+*.sublime-workspace

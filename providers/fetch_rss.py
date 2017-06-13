@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from feed.rss_wuxiaworld import rss_wuxiaworld
+from feed.feed_ww import Feed_WW
 
 
 def fetch(novels):
+  feed_ww = Feed_WW()
   links = []
-  links += rss_wuxiaworld(novels)
+  links += feed_ww.get(novels)
   return links
