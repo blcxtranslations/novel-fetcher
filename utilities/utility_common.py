@@ -11,8 +11,11 @@ import utility_settings
 def strip_unicode(text):
     return ''.join(i for i in text if ord(i)<128).strip()
 
-def get_page(url):
-  req = urllib2.Request(url , headers={'User-Agent': 'Magic Browser'})
+def get_page(url, mercury_api=None):
+  headers = {'User-Agent': 'Magic Browser'}
+  if mercury_api:
+    headers['x-api-key'] = mercury_api
+  req = urllib2.Request(url , headers=headers)
   req = urllib2.urlopen(req)
   page = req.read()
   req.close()
