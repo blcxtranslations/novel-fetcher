@@ -14,7 +14,7 @@ class Feed_WW(Feed):
     import feedparser
 
     releases = []
-    feed = feedparser.parse('http://www.wuxiaworld.com/feed/')
+    feed = feedparser.parse(self.feed_url)
     for entry in feed.entries:
       if entry.category not in novels:
         continue

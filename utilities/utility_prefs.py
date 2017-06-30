@@ -1,13 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import pprint
-import simplejson
-
-
-def get_prefs(prefs):
+def get_prefs():
   # TODO: more secure way of creds
-  f = open('configs/' + prefs)
+
+  from os import listdir
+  import pprint
+  import simplejson
+
+  configs = [name for name in listdir('configs/') if name.endswith('conf') and name != 'sample.conf']
+  if len(configs) != 1:
+    print "Too many custom config files, exiting"
+    exit()
+  f = open('configs/' + configs[0])
   conf = f.read()
   f.close()
   conf = simplejson.loads(conf)
@@ -15,13 +20,3 @@ def get_prefs(prefs):
     if s['default']:
       service = s
   return conf['novels'], service, conf['services']
-
-def update_prefs(prefs, novels):
-  (n, ds, s) = get_prefs(prefs)
-  new = {}
-  new['services'] = s
-  new['novels'] = list(set(n + novels))
-  f = open(prefs, 'w')
-  pjson = simplejson.dumps(new, sort_keys=True, indent=2, separators=(',', ': '))
-  f.write(pjson)
-  f.close()
