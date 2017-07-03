@@ -41,13 +41,15 @@ class Instapaper():
             self._query = _query
             self.endpoints = self.Endpoints()
             self.urls = self.Urls()
-        def add(self, new_url, folder_id):
+        def add(self, new_url, folder_id, content):
             endpoint = self.endpoints.add
             url = self.urls.add
             params = {}
             params['url'] = new_url
             if folder_id:
                 params['folder_id'] = folder_id
+            if content:
+                params['content'] = content
             success, content = self._query(endpoint, url, params)
             if not success:
                 return False, literal_eval(content)
@@ -167,8 +169,8 @@ class Instapaper():
         self.username = creds['username']
         self.userid = creds['user_id']
 
-    def bookmark_add(self, url, folder_id=None):
-        return self.bookmarks.add(url, folder_id)
+    def bookmark_add(self, url, folder_id=None, content=None):
+        return self.bookmarks.add(url, folder_id, content)
 
     def folders_find(self, folder_name):
         folders_list = self.folders.list()

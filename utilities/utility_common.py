@@ -11,8 +11,11 @@ import utility_settings
 def strip_unicode(text):
     return ''.join(i for i in text if ord(i)<128).strip()
 
-def get_page(url):
-  req = urllib2.Request(url , headers={'User-Agent': 'Magic Browser'})
+def get_page(url, mercury_api=None):
+  headers = {'User-Agent': 'Magic Browser'}
+  if mercury_api:
+    headers['x-api-key'] = mercury_api
+  req = urllib2.Request(url , headers=headers)
   req = urllib2.urlopen(req)
   page = req.read()
   req.close()
@@ -55,7 +58,7 @@ def print_colour(service, status, message, level=''):
   format_service = ';'.join([str(5), str(30), str(background)])
 
   text_timestamp = '{:19}'.format(timestamp)
-  text_service = '{:10}'.format(service) + ': ' + '{:8}'.format(status)
+  text_service = '{:10}'.format(service) + ': ' + '{:11}'.format(status)
 
   text_timestamp = '\x1b[%sm %s \x1b[0m' % (format_timestamp, text_timestamp)
   text_service = '\x1b[%sm %s \x1b[0m' % (format_service, text_service)
