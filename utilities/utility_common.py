@@ -44,10 +44,10 @@ def find_links(link_url, includes, excludes=[]):
   links = list(set(links))
   return links
 
-def send_links(service, links, folder, mercury_api):
-  if service['name'] == 'Instapaper':
+def send_link(reader, service, link, folder, mercury_api):
+  if reader == 'Instapaper':
     from readers.instapaper import send_instapaper
-    send_instapaper(service, links, folder, mercury_api)
+    return send_instapaper(service, link, folder, mercury_api)
 
 def print_colour(service, status, message, level=''):
   if level == 'debug' and utility_settings.loglevel < 2:

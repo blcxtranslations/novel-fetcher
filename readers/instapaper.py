@@ -5,7 +5,7 @@ from apis.instapaper import Instapaper
 import urllib2
 
 
-def send_instapaper(service, links, folder_name, mercury_api):
+def send_instapaper(service, link, folder_name, mercury_api):
   # Circular dependency requires that we only import this
   # And only import it inside this function
   ############################################################
@@ -14,26 +14,20 @@ def send_instapaper(service, links, folder_name, mercury_api):
   import json
   ############################################################
 
-  if len(links) == 0:
-    return
+  folder_id = None
+  if folder_name:
+    folder_id = service.folders_find_or_create(folder_name)
 
-  ip = Instapaper(service['key'], service['secret'])
-  ip.login(service['email'], service['password'])
+  if mercury_api:
+    page = get_page('https://mercury.postlight.com/parser?url=' + link, mercury_api)
+    page = json.loads(page)
+    success, msg = service.bookmark_add(link, folder_id, page['content'])
+  else:
+    success, msg = service.bookmark_add(link, folder_id)
 
-  for link in links:
-    folder_id = None
+  if success:
+    print_colour('Instapaper', 'Success', link, 'success')
+    return True
 
-    if folder_name:
-      folder_id = ip.folders_find_or_create(folder_name)
-
-    if mercury_api:
-      page = get_page('https://mercury.postlight.com/parser?url=' + link, mercury_api)
-      page = json.loads(page)
-      success, msg = ip.bookmark_add(link, folder_id, page['content'])
-    else:
-      success, msg = ip.bookmark_add(link, folder_id)
-
-    if success:
-      print_colour('Instapaper', 'Success', link, 'success')
-    else:
-      print_colour('Instapaper', 'Failed', link, 'error')
+  print_colour('Instapaper', 'Failed', link, 'error')
+  return False

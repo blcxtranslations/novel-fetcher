@@ -4,8 +4,7 @@
 import argparse
 import time
 
-from utilities.utility_common import send_links
-from utilities.utility_common import send_links
+from utilities.utility_common import send_link
 from utilities.utility_database import *
 from utilities.utility_prefs import get_prefs
 import utilities.utility_settings as utility_settings
@@ -15,19 +14,32 @@ import providers.fetch_web as fetch_web
 
 
 def fetch(args):
+  ############################################################
+  from apis.instapaper import Instapaper
+  ############################################################
   # print_colour('Updater', 'Checking', 'Checking for updates', level='info')
+
+  service = None
   (novels, mercury, reader) = get_prefs()
+
+  if reader['name'] == 'Instapaper':
+    service = Instapaper(reader['key'], reader['secret'])
+    service.login(reader['email'], reader['password'])
+
   releases = fetch_rss.fetch()
   for novel in novels:
     folder = None
-    if 'Folder' in novel:
-      folder = novel['Folder']
+    if 'folder' in novel:
+      folder = novel['folder']
     for (title, links) in releases:
-      if novel['Name'] == title:
+      if novel['name'] == title:
         links = check_links(links)
         links.sort()
         if not args.dry_run:
-            send_links(reader, links, folder, mercury)
+          for link in links:
+            result = send_link(reader['name'], service, link, folder, mercury)
+            if result:
+              store_link(link, args.dry_run)
 
 def check_tick(args):
   if args.dry_run:
