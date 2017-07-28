@@ -1,19 +1,22 @@
-import oauth2 as oauth
-from urllib import urlencode
-import urlparse
-from utilities.utility_common import print_colour
 from ast import literal_eval
+from urllib import urlencode
+
+import urlparse
+
+import oauth2 as oauth
+
+from utilities.utility_common import print_colour
 
 
-class Instapaper():
+class Instapaper(object):
     ############################################################
     # Definitions #
     ############################################################
-    class Account():
-        class Endpoints():
+    class Account(object):
+        class Endpoints(object):
             def __init__(self):
                 self.verify_credentials = "Account: Verify Credentials"
-        class Urls():
+        class Urls(object):
             def __init__(self):
                 self.verify_credentials = "https://www.instapaper.com/api/1/account/verify_credentials"
         def __init__(self, _query):
@@ -30,13 +33,13 @@ class Instapaper():
             else:
                 return literal_eval(content)
 
-    class Bookmarks():
-        class Endpoints():
+    class Bookmarks(object):
+        class Endpoints(object):
             def __init__(self):
-                self.add  = "Bookmarks: Add"
-        class Urls():
+                self.add = "Bookmarks: Add"
+        class Urls(object):
             def __init__(self):
-                self.add  = "https://www.instapaper.com/api/1/bookmarks/add"
+                self.add = "https://www.instapaper.com/api/1/bookmarks/add"
         def __init__(self, _query):
             self._query = _query
             self.endpoints = self.Endpoints()
@@ -56,16 +59,16 @@ class Instapaper():
             else:
                 return True, literal_eval(content)
 
-    class Folders():
-        class Endpoints():
+    class Folders(object):
+        class Endpoints(object):
             def __init__(self):
-                self.add       = "Folders: Add"
-                self.list      = "Folders: List"
+                self.add = "Folders: Add"
+                self.list = "Folders: List"
                 self.set_order = "Folders: Set Order"
-        class Urls():
+        class Urls(object):
             def __init__(self):
-                self.add       = "https://www.instapaper.com/api/1/folders/add"
-                self.list      = "https://www.instapaper.com/api/1/folders/list"
+                self.add = "https://www.instapaper.com/api/1/folders/add"
+                self.list = "https://www.instapaper.com/api/1/folders/list"
                 self.set_order = "https://www.instapaper.com/api/1/folders/set_order"
         def __init__(self, _query):
             self._query = _query
@@ -103,11 +106,11 @@ class Instapaper():
             else:
                 return literal_eval(content)
 
-    class OAuth():
-        class Endpoints():
+    class OAuth(object):
+        class Endpoints(object):
             def __init__(self):
                 self.access_token = "OAuth: Access Token"
-        class Urls():
+        class Urls(object):
             def __init__(self):
                 self.access_token = "https://www.instapaper.com/api/1/oauth/access_token"
         def __init__(self, _query):
@@ -125,7 +128,6 @@ class Instapaper():
             success, content = self._query(endpoint, url, params, True)
             if not success:
                 print_colour('Instapaper', 'Failed', "Login failed, wrong username or password", 'error')
-                from sys import exit
                 exit()
             else:
                 print_colour('Instapaper', 'Success', "Login successful", 'success')
@@ -144,6 +146,10 @@ class Instapaper():
         self.bookmarks = self.Bookmarks(self._query)
         self.folders = self.Folders(self._query)
         self.oauth = self.OAuth(self._query)
+
+        self.username = None
+        self.userid = None
+        self.token = None
 
     def _query(self, endpoint, url, params, get_token=False):
         if isinstance(params, dict):
@@ -180,18 +186,25 @@ class Instapaper():
         return False, 0
 
     def folders_find_or_create(self, folder_name):
+        """
+        Given a folder name, either finds or create a new folder on the users account
+        Returns the folder id of said folder
+        """
         success, folder_id = self.folders_find(folder_name)
         if success:
             return folder_id
         new_folder = self.folders.add(folder_name)
         return new_folder[0]['folder_id']
 
-    def _folders_get_title_id(key):
-        if key != 'title' and key != 'folder_id':
-            return True
-        return False
+    # def _folders_get_title_id(self, key):
+    #     if key != 'title' and key != 'folder_id':
+    #         return True
+    #     return False
 
     def folders_sort(self):
+        """
+        Change the order the folders are show in the UI
+        """
         # This api call returns successfully but doesn't actually work...
         folders_list = self.folders.list()
         folders_list.sort(key=lambda x: x['title'])

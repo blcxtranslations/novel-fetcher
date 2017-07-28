@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from feed.feed_ww import Feed_WW
+from providers.feed.feed_ww import FeedWW
 
 
 def fetch():
-  feed_ww = Feed_WW()
-  releases = []
-  releases += feed_ww.get()
-  return releases
+    feed_ww = FeedWW()
+    releases = []
+    releases += feed_ww.get()
+    return releases

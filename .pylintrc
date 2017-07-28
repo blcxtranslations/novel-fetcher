@@ -1,0 +1,17 @@
+[MESSAGES CONTROL]
+#   C0111 = Missing docstring
+#   C0301 = Line too long
+#   R0903 = Too few public methods
+#   R0902 = Too many instance attributes
+# Disable the message(s) with the given id(s).
+disable=C0111,C0301,R0902,R0903
+
+[REPORTS]
+output-format=colorized
+reports=no
+
+[FORMAT]
+max-line-length=80
+
+[MISCELLANEOUS]
+notes=TODO
