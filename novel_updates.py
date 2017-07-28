@@ -9,22 +9,14 @@ from utilities.utility_common import send_link
 from utilities.utility_database import check_links, store_link
 from utilities.utility_prefs import get_prefs
 
-import providers.fetch_rss as fetch_rss
-# import providers.fetch_web as fetch_web
+import providers.fetch_feed as fetch_feed
+import providers.fetch_bulk as fetch_bulk
 
 
-# def bulk(args):
-#     (novels, mercury, reader) = get_prefs()
-#     links = []
-#     links = fetch_web.fetch()
-#     links.sort()
-#     send_links(links, service)
-
-def feed(args):
+def bulk(args):
     ############################################################
     from apis.instapaper import Instapaper
     ############################################################
-    # print_colour('Updater', 'Checking', 'Checking for updates', level='info')
 
     service = None
     (novels, mercury, reader) = get_prefs()
@@ -33,7 +25,29 @@ def feed(args):
         service = Instapaper(reader['key'], reader['secret'])
         service.login(reader['email'], reader['password'])
 
-    releases = fetch_rss.fetch()
+    (folder, links) = fetch_bulk.fetch()
+
+    links = check_links(links)
+    if not args.dry_run:
+        folder_id = service.folders_find_or_create(folder)
+        for link in links:
+            result = send_link(reader['name'], service, link, folder_id, mercury)
+            if result:
+                store_link(link, args.dry_run)
+
+def feed(args):
+    ############################################################
+    from apis.instapaper import Instapaper
+    ############################################################
+
+    service = None
+    (novels, mercury, reader) = get_prefs()
+
+    if reader['name'] == 'Instapaper':
+        service = Instapaper(reader['key'], reader['secret'])
+        service.login(reader['email'], reader['password'])
+
+    releases = fetch_feed.fetch()
     for novel in novels:
         folder = None
         if 'folder' in novel:
@@ -43,9 +57,11 @@ def feed(args):
                 links = check_links(links)
                 links.sort()
                 if not args.dry_run:
+                    folder_id = None
+                    if novel['folder']:
+                        folder_id = service.folders_find_or_create(folder)
                     for link in links:
-                        result = send_link(reader['name'], service, link, \
-                            folder, mercury)
+                        result = send_link(reader['name'], service, link, folder_id, mercury)
                         if result:
                             store_link(link, args.dry_run)
 
@@ -55,9 +71,9 @@ def daemonize(args):
         time.sleep((int)(args.interval))
 
 def fetch(args):
-    # if args.bulk:
-    #     bulk(args)
-    #     return
+    if args.bulk:
+        bulk(args)
+        return
     if args.dry_run:
         feed(args)
         return

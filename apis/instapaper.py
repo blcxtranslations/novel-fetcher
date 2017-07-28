@@ -186,25 +186,13 @@ class Instapaper(object):
         return False, 0
 
     def folders_find_or_create(self, folder_name):
-        """
-        Given a folder name, either finds or create a new folder on the users account
-        Returns the folder id of said folder
-        """
         success, folder_id = self.folders_find(folder_name)
         if success:
             return folder_id
         new_folder = self.folders.add(folder_name)
         return new_folder[0]['folder_id']
 
-    # def _folders_get_title_id(self, key):
-    #     if key != 'title' and key != 'folder_id':
-    #         return True
-    #     return False
-
     def folders_sort(self):
-        """
-        Change the order the folders are show in the UI
-        """
         # This api call returns successfully but doesn't actually work...
         folders_list = self.folders.list()
         folders_list.sort(key=lambda x: x['title'])

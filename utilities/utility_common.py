@@ -2,6 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
+def ask_for_index(string, end, start=1):
+    selection = -1
+    while selection < start or selection > end:
+        selection = raw_input(string)
+        if len(selection) == 0:
+            return None
+        selection = int(selection)
+    return selection - 1
+
 def strip_unicode(text):
     return ''.join(i for i in text if ord(i) < 128).strip()
 
@@ -37,17 +46,15 @@ def find_links(link_url, includes, excludes=[]):
     links = tree.xpath('//a/@href')
     for include in includes:
         links = [link for link in links if include in link]
-        # links = filter(lambda link: include in link, links)
     for exclude in excludes:
         links = [link for link in links if exclude not in link]
-        # links = filter(lambda link: exclude not in link, links)
     links = list(set(links))
     return links
 
-def send_link(reader, service, link, folder, mercury_api):
+def send_link(reader, service, link, folder_id, mercury_api):
     if reader == 'Instapaper':
         from readers.instapaper import send_instapaper
-        return send_instapaper(service, link, folder, mercury_api)
+        return send_instapaper(service, link, folder_id, mercury_api)
 
 def print_colour(service, status, message, level=''):
     import datetime

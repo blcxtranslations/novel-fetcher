@@ -1,5 +1,4 @@
-RSS Novel Fetcher
+Novel Fetcher
 
-
-Make credentials.config in folder with your email, password, and instapaper email
-sudo ./rss-novel-fetcher.py &
+Copy configs/sample.conf and make the appropriate changes
+./novel-updates.py

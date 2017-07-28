@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-def send_instapaper(service, link, folder_name, mercury_api):
+def send_instapaper(service, link, folder_id=None, mercury_api=None):
     # Circular dependency requires that we only import this
     # And only import it inside this function
     ############################################################
@@ -10,10 +10,6 @@ def send_instapaper(service, link, folder_name, mercury_api):
     from utilities.utility_common import print_colour
     import json
     ############################################################
-
-    folder_id = None
-    if folder_name:
-        folder_id = service.folders_find_or_create(folder_name)
 
     if mercury_api:
         page = get_page('https://mercury.postlight.com/parser?url=' + link, mercury_api)

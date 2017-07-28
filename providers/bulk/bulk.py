@@ -13,3 +13,4 @@ class Bulk:
     @abstractmethod
     def get(self):
         pass
+
