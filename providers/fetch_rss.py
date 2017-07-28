@@ -4,8 +4,8 @@
 from feed.feed_ww import Feed_WW
 
 
-def fetch(novels):
+def fetch():
   feed_ww = Feed_WW()
-  links = []
-  links += feed_ww.get(novels)
-  return links
+  releases = []
+  releases += feed_ww.get()
+  return releases

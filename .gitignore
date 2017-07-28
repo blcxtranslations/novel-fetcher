@@ -5,3 +5,4 @@
 *.pyc
 !sample.conf
 *.sublime-workspace
+error-logs

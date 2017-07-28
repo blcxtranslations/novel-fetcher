@@ -8,24 +8,23 @@ from utilities.utility_common import *
 class Feed_WW(Feed):
   def __init__(self):
     Feed.__init__(self)
+    self.domain = 'www.wuxiaworld.com'
     self.feed_url = 'http://www.wuxiaworld.com/feed/'
 
-  def get(self, novels):
+  def get(self):
     import feedparser
 
     releases = []
     feed = feedparser.parse(self.feed_url)
     for entry in feed.entries:
-      if entry.category not in novels:
-        continue
-      link = strip_unicode(entry.link)
-      links = []
-      if entry.category == "Martial God Asura":
-        links = _construct_links(link)
-      else:
-        links = find_links(link, ['www.wuxiaworld.com', 'index', 'chapter'])
-      releases += links
+      title = strip_unicode(entry.category)
+      links = find_links(entry.link, ['www.wuxiaworld.com', 'index', 'chapter'])
+      releases.append((title, links))
     return releases
+
+    # MGA needs to have their links constructed because they print the announce post differently
+    #   if entry.category == "Martial God Asura":
+    #     links = _construct_links(link)
 
   def _construct_links(link_url):
     from bs4 import BeautifulSoup

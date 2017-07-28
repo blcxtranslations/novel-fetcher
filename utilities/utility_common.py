@@ -11,12 +11,24 @@ import utility_settings
 def strip_unicode(text):
     return ''.join(i for i in text if ord(i)<128).strip()
 
-def get_page(url, mercury_api=None):
+def get_page(url, mercury_api=None, backoff=0):
   headers = {'User-Agent': 'Magic Browser'}
   if mercury_api:
     headers['x-api-key'] = mercury_api
   req = urllib2.Request(url , headers=headers)
-  req = urllib2.urlopen(req)
+  try:
+    req = urllib2.urlopen(req)
+  except urllib2.HTTPError as err:
+    if err.status == 500:
+      print_colour('urllib2', 'Failed', "Getting the webpage failed", 'error')
+      if backoff == 3:
+        raise
+      print_colour('urllib2', 'Failed', "Retry number " + str(backoff), 'error')
+      import time
+      time.sleep(60 * math.pow(2, backoff))
+      return get_page(url, mercury_api, backoff + 1)
+  except:
+    raise
   page = req.read()
   req.close()
   return page
@@ -32,10 +44,10 @@ def find_links(link_url, includes, excludes=[]):
   links = list(set(links))
   return links
 
-def send_links(links, service):
+def send_links(service, links, folder, mercury_api):
   if service['name'] == 'Instapaper':
     from readers.instapaper import send_instapaper
-    send_instapaper(links, service)
+    send_instapaper(service, links, folder, mercury_api)
 
 def print_colour(service, status, message, level=''):
   if level == 'debug' and utility_settings.loglevel < 2:

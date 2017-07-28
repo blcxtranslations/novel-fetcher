@@ -5,7 +5,7 @@ from apis.instapaper import Instapaper
 import urllib2
 
 
-def send_instapaper(links, creds):
+def send_instapaper(service, links, folder_name, mercury_api):
   # Circular dependency requires that we only import this
   # And only import it inside this function
   ############################################################
@@ -17,14 +17,22 @@ def send_instapaper(links, creds):
   if len(links) == 0:
     return
 
-  ip = Instapaper(creds['key'], creds['secret'])
-  ip.login(creds['email'], creds['password'])
+  ip = Instapaper(service['key'], service['secret'])
+  ip.login(service['email'], service['password'])
 
   for link in links:
-    page = get_page('https://mercury.postlight.com/parser?url=' + link, creds['mercury_api'])
-    page = json.loads(page)
+    folder_id = None
 
-    success, msg = ip.bookmark_add(link, content=page['content'])
+    if folder_name:
+      folder_id = ip.folders_find_or_create(folder_name)
+
+    if mercury_api:
+      page = get_page('https://mercury.postlight.com/parser?url=' + link, mercury_api)
+      page = json.loads(page)
+      success, msg = ip.bookmark_add(link, folder_id, page['content'])
+    else:
+      success, msg = ip.bookmark_add(link, folder_id)
+
     if success:
       print_colour('Instapaper', 'Success', link, 'success')
     else:
