@@ -23,6 +23,9 @@ def get_page(url, mercury_api=None, backoff=0):
     req = urllib2.Request(url, headers=headers)
     try:
         req = urllib2.urlopen(req)
+        page = req.read()
+        req.close()
+        return page
     except urllib2.HTTPError, err:
         if err.code == 500:
             print_colour('urllib2', 'Failed', "Getting the webpage failed", 'error')
@@ -34,9 +37,6 @@ def get_page(url, mercury_api=None, backoff=0):
             return get_page(url, mercury_api, backoff + 1)
     except:
         raise
-    page = req.read()
-    req.close()
-    return page
 
 def find_links(link_url, includes, excludes=[]):
     from lxml import html
