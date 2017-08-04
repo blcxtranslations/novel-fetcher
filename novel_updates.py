@@ -13,10 +13,9 @@ import providers.fetch_feed as fetch_feed
 import providers.fetch_bulk as fetch_bulk
 
 
-def service_login(args):
+def service_login(args, reader):
     service = None
     if not args.dry_run:
-        (novels, mercury, reader) = get_prefs()
 
         if reader['name'] == 'Instapaper':
             ############################################################
@@ -27,9 +26,7 @@ def service_login(args):
 
     return service
 
-def bulk(args, service):
-    (novels, mercury, reader) = get_prefs()
-
+def bulk(args, service, novels, mercury, reader):
     (folder, links) = fetch_bulk.fetch()
     links = check_links(links)
 
@@ -43,9 +40,7 @@ def bulk(args, service):
             if result:
                 store_link(link, args.dry_run)
 
-def feed_worker(args, service):
-    (novels, mercury, reader) = get_prefs()
-
+def feed_worker(args, service, novels, mercury, reader):
     releases = fetch_feed.fetch()
     for novel in novels:
         folder = None
@@ -64,19 +59,21 @@ def feed_worker(args, service):
                         if result:
                             store_link(link, args.dry_run)
 
-def feed(args, service):
+def feed(args, service, novels, mercury, reader):
     while True:
-        feed_worker(args, service)
+        feed_worker(args, service, novels, mercury, reader)
         if args.dry_run:
             return
         time.sleep((int)(args.interval))
 
 def fetch(args):
-    service = service_login(args)
+    (novels, mercury, reader) = get_prefs()
+
+    service = service_login(args, reader)
     if args.bulk:
-        bulk(args, service)
+        bulk(args, service, novels, mercury, reader)
     else:
-        feed(args, service)
+        feed(args, service, novels, mercury, reader)
 
 
 PARSER = argparse.ArgumentParser(description='Novel Updater')
