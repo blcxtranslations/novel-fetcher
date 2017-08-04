@@ -13,39 +13,38 @@ import providers.fetch_feed as fetch_feed
 import providers.fetch_bulk as fetch_bulk
 
 
-def bulk(args):
-    ############################################################
-    from apis.instapaper import Instapaper
-    ############################################################
-
+def service_login(args):
     service = None
+    if not args.dry_run:
+        (novels, mercury, reader) = get_prefs()
+
+        if reader['name'] == 'Instapaper':
+            ############################################################
+            from apis.instapaper import Instapaper
+            ############################################################
+            service = Instapaper(reader['key'], reader['secret'])
+            service.login(reader['email'], reader['password'])
+
+    return service
+
+def bulk(args, service):
     (novels, mercury, reader) = get_prefs()
 
-    if reader['name'] == 'Instapaper':
-        service = Instapaper(reader['key'], reader['secret'])
-        service.login(reader['email'], reader['password'])
-
     (folder, links) = fetch_bulk.fetch()
-
     links = check_links(links)
-    if not args.dry_run:
+
+    if args.dry_run:
+        for link in links:
+            print link
+    else:
         folder_id = service.folders_find_or_create(folder)
         for link in links:
             result = send_link(reader['name'], service, link, folder_id, mercury)
             if result:
                 store_link(link, args.dry_run)
 
-def feed(args):
-    ############################################################
-    from apis.instapaper import Instapaper
-    ############################################################
-
-    service = None
+def feed_worker(args, service):
     (novels, mercury, reader) = get_prefs()
-
-    if reader['name'] == 'Instapaper':
-        service = Instapaper(reader['key'], reader['secret'])
-        service.login(reader['email'], reader['password'])
 
     releases = fetch_feed.fetch()
     for novel in novels:
@@ -65,19 +64,19 @@ def feed(args):
                         if result:
                             store_link(link, args.dry_run)
 
-def daemonize(args):
+def feed(args, service):
     while True:
-        feed(args)
+        feed_worker(args, service)
+        if args.dry_run:
+            return
         time.sleep((int)(args.interval))
 
 def fetch(args):
+    service = service_login(args)
     if args.bulk:
-        bulk(args)
-        return
-    if args.dry_run:
-        feed(args)
-        return
-    daemonize(args)
+        bulk(args, service)
+    else:
+        feed(args, service)
 
 
 PARSER = argparse.ArgumentParser(description='Novel Updater')
@@ -86,7 +85,7 @@ PARSER.add_argument('-b', '--bulk', dest='bulk', action='store_true', \
 PARSER.add_argument('-d', '--dry-run', dest='dry_run', action='store_true', \
     help='Do a dry-run, not storing, no sending to email')
 PARSER.add_argument('-i', '--interval', dest='interval', default=600, \
-    help='How often in seconds to check the RSS feed (default 600 seconds)')
+    help='How often in seconds to check the updates feed (default 600 seconds)')
 
 ARGUMENTS = PARSER.parse_args()
 fetch(ARGUMENTS)

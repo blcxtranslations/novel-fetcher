@@ -19,9 +19,6 @@ def sort_links(links):
     for i in xrange(count):
         new_links.sort(key=lambda x: x[0][count - 1 - i])
 
-    # for link in new_links:
-    #     print link
-
     new_links = [link[1] for link in new_links]
     return new_links
 
