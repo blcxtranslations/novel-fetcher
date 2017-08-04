@@ -5,7 +5,7 @@
 import argparse
 import time
 
-from utilities.utility_common import send_link
+from utilities.utility_common import send_link, print_colour
 from utilities.utility_database import check_links, store_link
 from utilities.utility_prefs import get_prefs
 
@@ -26,19 +26,21 @@ def service_login(args, reader):
 
     return service
 
-def bulk(args, service, novels, mercury, reader):
+def bulk(args, service, mercury, reader):
     (folder, links) = fetch_bulk.fetch()
     links = check_links(links)
 
     if args.dry_run:
         for link in links:
-            print link
-    else:
-        folder_id = service.folders_find_or_create(folder)
-        for link in links:
-            result = send_link(reader['name'], service, link, folder_id, mercury)
-            if result:
-                store_link(link, args.dry_run)
+            print_colour(reader['name'], 'Would Save', link, 'success')
+            print_colour('Database', 'Would Store', link, 'success')
+        return
+
+    folder_id = service.container_find_or_create(folder)
+    for link in links:
+        result = send_link(reader['name'], service, link, folder_id, mercury)
+        if result:
+            store_link(link)
 
 def feed_worker(args, service, novels, mercury, reader):
     releases = fetch_feed.fetch()
@@ -50,14 +52,20 @@ def feed_worker(args, service, novels, mercury, reader):
             if novel['name'] == title:
                 links = check_links(links)
                 links.sort()
-                if not args.dry_run:
-                    folder_id = None
-                    if novel['folder']:
-                        folder_id = service.folders_find_or_create(folder)
+
+                if args.dry_run:
                     for link in links:
-                        result = send_link(reader['name'], service, link, folder_id, mercury)
-                        if result:
-                            store_link(link, args.dry_run)
+                        print_colour(reader['name'], 'Would Save', link, 'success')
+                        print_colour('Database', 'Would Store', link, 'success')
+                    continue
+
+                folder_id = None
+                if novel['folder']:
+                    folder_id = service.container_find_or_create(folder)
+                for link in links:
+                    result = send_link(reader['name'], service, link, folder_id, mercury)
+                    if result:
+                        store_link(link)
 
 def feed(args, service, novels, mercury, reader):
     while True:
@@ -71,7 +79,7 @@ def fetch(args):
 
     service = service_login(args, reader)
     if args.bulk:
-        bulk(args, service, novels, mercury, reader)
+        bulk(args, service, mercury, reader)
     else:
         feed(args, service, novels, mercury, reader)
 

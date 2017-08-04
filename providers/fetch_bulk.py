@@ -13,7 +13,7 @@ def fetch():
     ]
 
     selection_question = 'Select the novel site:\n'
-    for index, (selection, fetch) in enumerate(selections):
+    for index, (selection, get) in enumerate(selections):
         selection_question += str(index + 1) + ':\t' + selection + '\n'
     selection = ask_for_index(selection_question, len(selections))
 

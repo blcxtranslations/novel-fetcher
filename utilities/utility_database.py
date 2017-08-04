@@ -24,13 +24,10 @@ def check_links(links):
     conn.close()
     return newlinks
 
-def store_link(link, dry_run=True):
+def store_link(link):
     conn = sqlite3.connect('configs/novels.db')
-    if dry_run:
-        print_colour('Database', 'Would Store', link, 'success')
-    else:
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO chapters (link) VALUES ('" + link + "')")
-        print_colour('Database', 'Stored', link, 'success')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO chapters (link) VALUES ('" + link + "')")
+    print_colour('Database', 'Stored', link, 'success')
     conn.commit()
     conn.close()

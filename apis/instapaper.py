@@ -185,7 +185,7 @@ class Instapaper(object):
                 return True, folder['folder_id']
         return False, 0
 
-    def folders_find_or_create(self, folder_name):
+    def container_find_or_create(self, folder_name):
         success, folder_id = self.folders_find(folder_name)
         if success:
             return folder_id
