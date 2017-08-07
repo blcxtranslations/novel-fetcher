@@ -4,7 +4,7 @@
 
 def get_prefs():
     from os import listdir
-    import simplejson
+    import json
 
     # Restricting the number of config files down to one for now
     configs = [name for name in listdir('configs/') if name.endswith('conf') and name != 'sample.conf']
@@ -16,7 +16,7 @@ def get_prefs():
     conf = file_handle.read()
     file_handle.close()
 
-    conf = simplejson.loads(conf)
+    conf = json.loads(conf)
 
     if 'mercury_api' in conf:
         return conf['novels'], conf['mercury_api'], conf['reader']

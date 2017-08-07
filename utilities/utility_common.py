@@ -26,7 +26,7 @@ def get_page(url, mercury_api=None, backoff=0):
         page = req.read()
         req.close()
         return page
-    except urllib2.HTTPError, err:
+    except urllib2.HTTPError as err:
         if err.code == 500:
             print_colour('urllib2', 'Failed', "Getting the webpage failed", 'error')
             if backoff == 3:
@@ -80,3 +80,37 @@ def print_colour(service, status, message, level=''):
     text_timestamp = '\x1b[%sm %s \x1b[0m' % (format_timestamp, text_timestamp)
     text_service = '\x1b[%sm %s \x1b[0m' % (format_service, text_service)
     print text_timestamp, text_service, message
+
+def bulk_print(links):
+    from backports.shutil_get_terminal_size import get_terminal_size
+
+    (col, row) = get_terminal_size()
+    row -= 1
+
+    lines = []
+    for i in xrange(row):
+        lines.append('')
+
+    zeroes = len(str(len(links)))
+
+    longest = 0
+    for link in links:
+        if len(link) > longest:
+            longest = len(link)
+
+    size = longest + zeroes + 6 # four for spacer between links, 1 for the : and one for a space
+
+    for i, link in enumerate(links):
+        which = i % row
+        line = ''
+        if len(lines[which]) != 0:
+            line += '    '
+        line += '0' * (zeroes - len(str(i + 1)))
+        line += str(i + 1)
+        line += ': '
+        line += link
+        line += ' ' * (longest - len(link))
+        lines[which] += line
+
+    for line in lines:
+        print line

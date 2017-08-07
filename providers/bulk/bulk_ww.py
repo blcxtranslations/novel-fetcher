@@ -22,6 +22,19 @@ def sort_links(links):
     new_links = [link[1] for link in new_links]
     return new_links
 
+def get_common_prefix(links):
+    prefix = ''
+    index = 0
+    while True:
+        index += 1
+        prefix = links[0][:index]
+        for link in links:
+            if prefix not in link:
+                if index > 0:
+                    index -= 1
+                return index
+    return 0
+
 class BulkWW(Bulk):
     def __init__(self):
         Bulk.__init__(self)
@@ -52,7 +65,7 @@ class BulkWW(Bulk):
         return links
 
     def get(self):
-        from utilities.utility_common import ask_for_index
+        from utilities.utility_common import ask_for_index, bulk_print
 
         novels = self._fetch_novels()
 
@@ -64,7 +77,15 @@ class BulkWW(Bulk):
         (novel, url) = novels[selection]
         index = self._fetch_index(url)
 
+        prefix = get_common_prefix(index)
+        short_form = [link[prefix:] for link in index]
+        short_form = [link[:-1] for link in short_form if link.endswith('/')] + [link for link in short_form if not link.endswith('/')]
+
+        for link in short_form:
+            print link
+
         print "There are %s chapters in %s" % (len(index), novels[selection][0])
+        bulk_print(short_form)
         lower = ask_for_index("Start from chapter: ", len(index))
         upper = ask_for_index("End at chapter: ", len(index))
         index = index[lower:upper]
