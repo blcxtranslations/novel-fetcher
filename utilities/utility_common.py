@@ -115,3 +115,19 @@ def bulk_print(links):
 
     for line in lines:
         print line
+
+def get_common_prefix_len(links):
+    if len(links) == 0:
+        return 0
+
+    prefix = ''
+    index = 0
+    while True:
+        index += 1
+        prefix = links[0][:index]
+        for link in links:
+            if prefix not in link:
+                if index > 0:
+                    index -= 1
+                return index
+    return 0

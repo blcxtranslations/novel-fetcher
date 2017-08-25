@@ -13,7 +13,8 @@ class FeedRTD(Feed):
     def _construct_links(self, link_url):
         import re
         from bs4 import BeautifulSoup
-        from utilities.utility_common import get_page, find_links
+        from utilities.utility_common import find_links
+        from utilities.utility_common import get_page
 
         soup = BeautifulSoup(get_page(link_url), "lxml")
         article = soup.find('article')
@@ -29,7 +30,8 @@ class FeedRTD(Feed):
 
     def get(self):
         import feedparser
-        from utilities.utility_common import strip_unicode, find_links
+        from utilities.utility_common import find_links
+        from utilities.utility_common import strip_unicode
 
         releases = []
         feed = feedparser.parse(self.feed_url)

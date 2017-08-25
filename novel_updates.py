@@ -5,8 +5,10 @@
 import argparse
 import time
 
-from utilities.utility_common import send_link, print_colour
-from utilities.utility_database import check_links, store_link
+from utilities.utility_common import print_colour
+from utilities.utility_common import send_link
+from utilities.utility_database import check_links
+from utilities.utility_database import store_link
 from utilities.utility_prefs import get_prefs
 
 import providers.fetch_feed as fetch_feed
