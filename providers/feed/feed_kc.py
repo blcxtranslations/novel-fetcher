@@ -4,11 +4,11 @@
 from providers.feed.feed import Feed
 
 
-class FeedWW(Feed):
+class FeedKC(Feed):
     def __init__(self):
         Feed.__init__(self)
-        self.domain = 'www.wuxiaworld.com'
-        self.feed_url = 'http://www.wuxiaworld.com/feed/'
+        self.domain = 'https://kobatochan.com'
+        self.feed_url = 'https://kobatochan.com/feed/'
 
     def _construct_links(self, link_url):
         import re
@@ -34,11 +34,13 @@ class FeedWW(Feed):
         releases = []
         feed = feedparser.parse(self.feed_url)
         for entry in feed.entries:
-            title = strip_unicode(entry.category)
-            links = find_links(entry.link, [self.domain, 'index', 'chapter'])
+            title = strip_unicode(entry.title)
+            links = [strip_unicode(entry.link)]
+            # links = find_links(entry.link, [self.domain, 'chapter'], ['#comment', '#respond', 'redirect_to'])
             releases.append((title, links))
-        return releases
 
-        # MGA needs to have their links constructed because they print the announce post differently
-        #   if entry.category == "Martial God Asura":
-        #     links = _construct_links(link)
+        for (title, links) in releases:
+            print title
+            for link in links:
+                print '\t', link
+        return releases

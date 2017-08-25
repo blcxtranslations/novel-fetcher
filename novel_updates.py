@@ -49,7 +49,7 @@ def feed_worker(args, service, novels, mercury, reader):
         if 'folder' in novel:
             folder = novel['folder']
         for (title, links) in releases:
-            if novel['name'] == title:
+            if novel['name'].lower() in title.lower():
                 links = check_links(links)
                 links.sort()
 
