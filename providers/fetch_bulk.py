@@ -4,17 +4,20 @@
 from utilities.utility_common import ask_for_index
 
 from providers.bulk.bulk_blas import BulkBLAS
+from providers.bulk.bulk_kc import BulkKC
 from providers.bulk.bulk_turbo import BulkTURBO
 from providers.bulk.bulk_ww import BulkWW
 
 
 def fetch():
     bulk_blas = BulkBLAS()
+    bulk_kc = BulkKC()
     bulk_turbo = BulkTURBO()
     bulk_ww = BulkWW()
 
     selections = [
         ('Blastron', bulk_blas.get),
+        ('KobatoChan', bulk_kc.get),
         ('Turbo', bulk_turbo.get),
         ('Wuxiaworld', bulk_ww.get),
     ]

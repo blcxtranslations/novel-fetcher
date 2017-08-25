@@ -4,24 +4,6 @@
 from providers.bulk.bulk import Bulk
 
 
-def sort_links(links):
-    import re
-
-    new_links = []
-    count = 0
-    for link in links:
-        slink = re.split('-|/', link)
-        chapter = [int(str(s)) for s in slink if s.isdigit()]
-        if len(chapter) > count:
-            count = len(chapter)
-        new_links.append([chapter, link])
-
-    for i in xrange(count):
-        new_links.sort(key=lambda x: x[0][count - 1 - i])
-
-    new_links = [link[1] for link in new_links]
-    return new_links
-
 class BulkTURBO(Bulk):
     def __init__(self):
         Bulk.__init__(self)
@@ -47,6 +29,7 @@ class BulkTURBO(Bulk):
 
     def _fetch_index(self, url):
         from utilities.utility_common import find_links
+        from utilities.utility_common import sort_links
 
         links = find_links(url, [self.domain, 'chapter'])
         print links

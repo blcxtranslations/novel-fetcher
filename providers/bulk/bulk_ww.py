@@ -4,25 +4,6 @@
 from providers.bulk.bulk import Bulk
 
 
-def sort_links(links):
-    import re
-
-    new_links = []
-    count = 0
-    for link in links:
-        slink = re.split('-|/', link)
-        chapter = [int(str(s)) for s in slink if s.isdigit()]
-        if len(chapter) > count:
-            count = len(chapter)
-        new_links.append([chapter, link])
-
-    for i in xrange(count):
-        new_links.sort(key=lambda x: x[0][count - 1 - i])
-
-    new_links = [link[1] for link in new_links]
-    return new_links
-
-
 class BulkWW(Bulk):
     def __init__(self):
         Bulk.__init__(self)
@@ -48,6 +29,7 @@ class BulkWW(Bulk):
 
     def _fetch_index(self, url):
         from utilities.utility_common import find_links
+        from utilities.utility_common import sort_links
 
         links = find_links(url, [self.domain, 'index', 'chapter'])
         links = sort_links(links)
@@ -71,9 +53,6 @@ class BulkWW(Bulk):
         prefix_len = get_common_prefix_len(index)
         short_form = [link[prefix_len:] for link in index]
         short_form = [link[:-1] for link in short_form if link.endswith('/')] + [link for link in short_form if not link.endswith('/')]
-
-        for link in short_form:
-            print link
 
         print "There are %s chapters in %s" % (len(index), novels[selection][0])
         bulk_print(short_form)

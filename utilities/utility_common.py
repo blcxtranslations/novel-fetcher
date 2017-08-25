@@ -131,3 +131,54 @@ def get_common_prefix_len(links):
                     index -= 1
                 return index
     return 0
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+def check_if_all_number(nums):
+    for n in nums:
+        if not is_number(n):
+            return False
+    return True
+
+def stringify_chapter_numbers(nums):
+    l = 0
+    for n in nums:
+        if len(n) > l:
+            l = len(n)
+    new_nums = []
+    for n in nums:
+        new_num = ''
+        new_num += '0' * (l - len(n))
+        new_num += str(n)
+        new_nums.append(new_num)
+    return new_nums
+
+def sort_links(links):
+    import re
+
+    new_links = []
+    count = 0
+    for link in links:
+        slink = re.split('-|/', link)
+        chapter = [int(str(s)) for s in slink if s.isdigit()]
+        if len(chapter) < count:
+            count = len(chapter)
+        new_links.append([chapter, link])
+
+    for i in xrange(count):
+        new_links.sort(key=lambda x: x[0][count - 1 - i])
+
+    new_links = [link[1] for link in new_links]
+    return new_links
