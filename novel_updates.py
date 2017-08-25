@@ -45,27 +45,36 @@ def bulk(args, service, mercury, reader):
 def feed_worker(args, service, novels, mercury, reader):
     releases = fetch_feed.fetch()
     for novel in novels:
+        print_colour('Checking', 'Novel Name', novel['name'].upper(), 'debug')
+
         folder = None
         if 'folder' in novel:
             folder = novel['folder']
+
+        links_to_store = []
         for (title, links) in releases:
             if novel['name'].lower() in title.lower():
                 links = check_links(links)
-                links.sort()
+                # links.sort()
+                links_to_store += links
+        links_to_store.sort()
+        if len(links_to_store) == 0:
+            continue
 
-                if args.dry_run:
-                    for link in links:
-                        print_colour(reader['name'], 'Would Save', link, 'success')
-                        print_colour('Database', 'Would Store', link, 'success')
-                    continue
 
-                folder_id = None
-                if novel['folder']:
-                    folder_id = service.container_find_or_create(folder)
-                for link in links:
-                    result = send_link(reader['name'], service, link, folder_id, mercury)
-                    if result:
-                        store_link(link)
+        if args.dry_run:
+            for link in links_to_store:
+                print_colour(reader['name'], 'Would Save', link, 'success')
+                print_colour('Database', 'Would Store', link, 'success')
+            continue
+
+        folder_id = None
+        if folder:
+            folder_id = service.container_find_or_create(folder)
+        for link in links_to_store:
+            result = send_link(reader['name'], service, link, folder_id, mercury)
+            if result:
+                store_link(link)
 
 def feed(args, service, novels, mercury, reader):
     while True:
