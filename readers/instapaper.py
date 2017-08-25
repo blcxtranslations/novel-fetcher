@@ -13,8 +13,11 @@ def send_instapaper(service, link, folder_id=None, mercury_api=None):
 
     if mercury_api:
         page = get_page('https://mercury.postlight.com/parser?url=' + link, mercury_api)
-        page = json.loads(page)
-        success, msg = service.bookmark_add(link, folder_id, page['content'])
+        if page:
+            page = json.loads(page)
+            success, msg = service.bookmark_add(link, folder_id, page['content'])
+        else:
+            success, msg = service.bookmark_add(link, folder_id)
     else:
         success, msg = service.bookmark_add(link, folder_id)
 

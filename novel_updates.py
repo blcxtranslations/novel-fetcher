@@ -61,7 +61,6 @@ def feed_worker(args, service, novels, mercury, reader):
         if len(links_to_store) == 0:
             continue
 
-
         if args.dry_run:
             for link in links_to_store:
                 print_colour(reader['name'], 'Would Save', link, 'success')

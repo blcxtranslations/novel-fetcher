@@ -19,6 +19,7 @@ def get_page(url, mercury_api=None, backoff=0):
 
     headers = {'User-Agent': 'Magic Browser'}
     if mercury_api:
+        headers['Content-Type'] = 'application/json'
         headers['x-api-key'] = mercury_api
     req = urllib2.Request(url, headers=headers)
     try:

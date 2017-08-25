@@ -4,11 +4,11 @@
 from providers.feed.feed import Feed
 
 
-class FeedKC(Feed):
+class FeedRTD(Feed):
     def __init__(self):
         Feed.__init__(self)
-        self.domain = 'https://kobatochan.com'
-        self.feed_url = 'https://kobatochan.com/feed/'
+        self.domain = 'http://raisingthedead.ninja/'
+        self.feed_url = 'http://raisingthedead.ninja/feed/'
 
     def _construct_links(self, link_url):
         import re
